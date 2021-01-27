@@ -11,7 +11,7 @@
 .App .TodoApp .titles {
     width: 100%;
     flex: 1;
-    background:#e53935;
+    background:#5e35b1;
     display: flex;
     align-items: center;
     justify-content: center;
