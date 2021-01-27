@@ -1,4 +1,4 @@
-.App .TodoApp{
+.App .TodoApp {
     width: 800px;
 
     display: flex;
@@ -8,10 +8,10 @@
     height: 600px;
 }
 
-.App .TodoApp .titles{
+.App .TodoApp .titles {
     width: 100%;
     flex: 1;
-    background: #f4511e;
+    background:#e53935;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +21,7 @@
     font-size: 1.5rem;
 }
 
-.App .TodoApp .todos{
+.App .TodoApp .todos {
     flex: 4;
 
     display: flex;
@@ -29,12 +29,12 @@
     align-items: center;
 }
 
-.App .TodoApp .todos .newTodo{
+.App .TodoApp .todos .newTodo {
     width: 90%;
     margin-top: 30px;
 }
 
-.App .TodoApp .todos .newTodo form{
+.App .TodoApp .todos .newTodo form {
     display: flex;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -42,25 +42,41 @@
     overflow: hidden;
 }
 
-.App .TodoApp .todos .newTodo form input{
+.App .TodoApp .todos .newTodo form input {
     flex: 10;
     border: none;
     padding-left: 10px;
 }
+
 .App .TodoApp .todos .newTodo form button {
     flex: 1;
     border: none;
-    background-color: #43a047;
+    background-color: #009688;
     color: white;
-    font-size: 1.5rem;
+    font-size: 2rem;
     border-left: 1px solid #ccc;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: all ease-in-out 0.1s;
 }
-.App .TodoApp .list{
+
+.App .TodoApp .todos .newTodo form button:hover{
+    background-color: #00695f;
+    cursor: pointer;
+    color: #bbbbbb;
+}
+
+
+
+.App .TodoApp .list {
     width: 90%;
     margin-top: 30px;
 }
 
-.App .TodoApp .list ul{
+.App .TodoApp .list ul {
     display: flex;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -70,14 +86,34 @@
     list-style: none;
 }
 
-.App .TodoApp .list ul li{
-    display: flex;
+.App .TodoApp .list ul li {
     height: 50px;
     align-items: center;
     border-bottom: 1px solid #24242424;
+    padding: 0px 15px;
+
+    display: flex;
+    justify-content: space-between;
 }
 
-.App .TodoApp .list ul li:last-child{
+.App .TodoApp .list ul li .task{
+    display: flex;
+
+}
+
+.App .TodoApp .list ul li .task .state svg{
+    margin-right: 5px;
+    color: #666;
+}
+
+.App .TodoApp .list ul li .task .state.ok svg{
+    color:#4caf50;
+}
+
+.App .TodoApp .list ul li .delete{
+    color: #b71c1c;
+}
+
+.App .TodoApp .list ul li:last-child {
     border: none;
 }
-
