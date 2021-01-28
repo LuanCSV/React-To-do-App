@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './styles.css';
 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
@@ -7,39 +7,38 @@ import { faCircle as tarefaPendente, faCheckCircle as tarefaConcluida} from '@fo
 
 const Home = props => {
 
-
-    const initialTasks = [
-        {
-            state: false,
-            description: 'JOGAR',
-            id: 1
-        },
-        {
-            state: false,
-            description: 'COMER',
-            id: 2
-        },
-        {
-            state: true,
-            description: 'LAVAR LOUCA',
-            id: 3
-        },
-        {
-            state: true,
-            description: 'COZINHAR',
-            id: 4
-        },
-    ];
-
     const [tasks, setTasks] = useState([]);
+    const [valueInput, setValueInput] = useState('');
 
-    const loadTasks = () => {
+    const loadTasks = useCallback(() => {
+        const initialTasks = [
+            {
+                state: false,
+                description: 'JOGAR',
+                id: 1
+            },
+            {
+                state: false,
+                description: 'COMER',
+                id: 2
+            },
+            {
+                state: true,
+                description: 'LAVAR LOUCA',
+                id: 3
+            },
+            {
+                state: true,
+                description: 'COZINHAR',
+                id: 4
+            },
+        ];
         setTasks([...initialTasks]);
-    };
+    }, []);
 
     useEffect(() => {
         loadTasks();
-    }, []);
+    }, [loadTasks]);
 
     const completeTask = (task) => {
         const tasksTemp = [...tasks];
@@ -52,6 +51,30 @@ const Home = props => {
         });
         taskUpdate.state = !taskUpdate.state;
         setTasks(tasksTemp);
+    }
+
+    const addTask = () => {
+        const newTask = {
+            id: Date.now(),
+            description: valueInput,
+            state: false
+        }
+
+        const taskTemp = [...tasks];
+        taskTemp.push(newTask);
+        setTasks(taskTemp);
+        setValueInput('');
+    }
+
+    const deleteTask = (task) => {
+        const tasksTemp = [...tasks];
+        // const taskDelete = tasksTemp.find(t => {
+        //     return t.id === task.id;
+        // });
+        const indexofTask = tasksTemp.findIndex((t) => t.id === task.id);
+        tasksTemp.splice(indexofTask, 1);
+        setTasks(tasksTemp);
+        console.log(tasksTemp);
     }
 
     const renderTarefas = () => {
@@ -73,7 +96,7 @@ const Home = props => {
                         
                         <div className="description">{task.description} </div>
                     </div>
-                    <div className="delete">
+                    <div onClick={() => deleteTask(task)} className="delete">
                         <Icon icon={lixeira}/> 
                     </div>
                 </li>
@@ -88,8 +111,13 @@ const Home = props => {
             <div className="todos">
                 <div className="newTodo">
                     <form>
-                        <input type="text" placeholder="Tarefa..."/>
-                        <button type="button"><Icon icon={adicionarTarefa}/></button>
+                        <input 
+                            type="text" 
+                            placeholder="Tarefa..." 
+                            value={valueInput}
+                            onChange={(event) => setValueInput(event.target.value)}
+                        />
+                        <button type="button" onClick={() => addTask()}><Icon icon={adicionarTarefa}/></button>
                     </form>
                 </div>
 
