@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css';
 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
@@ -7,7 +7,8 @@ import { faCircle as tarefaPendente, faCheckCircle as tarefaConcluida} from '@fo
 
 const Home = props => {
 
-    const tasks = [
+
+    const initialTasks = [
         {
             state: false,
             description: 'JOGAR',
@@ -30,18 +31,47 @@ const Home = props => {
         },
     ];
 
+    const [tasks, setTasks] = useState([]);
+
+    const loadTasks = () => {
+        setTasks([...initialTasks]);
+    };
+
+    useEffect(() => {
+        loadTasks();
+    }, []);
+
+    const completeTask = (task) => {
+        const tasksTemp = [...tasks];
+        // metodo com filter
+        // const [taskUpdate] = tasksTemp.filter(t => {
+        //     return t.id === task.id;
+        // });
+        const taskUpdate = tasksTemp.find(t => {
+            return t.id === task.id;
+        });
+        taskUpdate.state = !taskUpdate.state;
+        setTasks(tasksTemp);
+    }
+
     const renderTarefas = () => {
         return (
             tasks.map((task) => {
                 return (
                     <li key={task.id}> 
                     <div className="task">
-                        <div className={!task.state ? 'state' : 'state ok'}>
-                            {!task.state ? <Icon icon={tarefaPendente}/> : <Icon icon={tarefaConcluida}/>} 
-                        </div>
-                        <div className="description">
-                            {task.description} 
-                        </div>
+
+                        {task.state && <div className="state ok" onClick={() => completeTask(task)} ><Icon icon={tarefaConcluida}/></div>}
+                        {!task.state &&
+                            <div 
+                                className="state" 
+                                onClick={() => completeTask(task)}
+                            >
+                                <Icon icon={tarefaPendente}/>
+                            </div>
+                        }
+                        
+                        <div className="description">{task.description} </div>
                     </div>
                     <div className="delete">
                         <Icon icon={lixeira}/> 
@@ -57,7 +87,7 @@ const Home = props => {
             <div className="titles">To do - App</div>
             <div className="todos">
                 <div className="newTodo">
-                    <form onSubmit={false}>
+                    <form>
                         <input type="text" placeholder="Tarefa..."/>
                         <button type="button"><Icon icon={adicionarTarefa}/></button>
                     </form>
