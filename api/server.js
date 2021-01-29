@@ -1,5 +1,16 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const Task = require('./models/task-model');
+
+mongoose.connect('mongodb+srv://todoUser:todoUser@mean-course.ocusw.mongodb.net/To-do-ReactDB?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true }
+);
+
+const db = mongoose.connection;
+db.once('open', () => {
+    console.log('MongoDB conectado');
+});
 
 const app = express();
 
@@ -9,31 +20,11 @@ app.get('/', (req, res) => {
     res.json({ message: "Mensagem" })
 });
 
-app.get('/tasks', (req, res, next) => {
-    const initialTasks = [
-        {
-            state: false,
-            description: 'JOGAR',
-            id: 1
-        },
-        {
-            state: false,
-            description: 'COMER',
-            id: 2
-        },
-        {
-            state: true,
-            description: 'LAVAR LOUCA',
-            id: 3
-        },
-        {
-            state: true,
-            description: 'COZINHAR',
-            id: 4
-        },
-    ];
+app.get('/tasks', async (req, res, next) => {
+    const Task = require('./models/task-model');
 
-    res.json(initialTasks)
+    const registeredTasks = await Task.find();
+    res.json(registeredTasks);
 });
 
 app.listen(5050, () => {
