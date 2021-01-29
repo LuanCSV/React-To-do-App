@@ -53,17 +53,22 @@ const Home = props => {
         setTasks(tasksTemp);
     }
 
-    const addTask = () => {
-        const newTask = {
-            id: Date.now(),
-            description: valueInput,
-            state: false
-        }
+    const addTask = (e) => {
+        if (valueInput.length > 0) {
+            const newTask = {
+                id: Date.now(),
+                description: valueInput.toUpperCase(),
+                state: false
+            }
 
-        const taskTemp = [...tasks];
-        taskTemp.push(newTask);
-        setTasks(taskTemp);
-        setValueInput('');
+            const taskTemp = [...tasks];
+            taskTemp.push(newTask);
+            setTasks(taskTemp);
+            setValueInput('');
+        } else {
+            alert('Digite a descricao da tarefa')
+        }
+        e.preventDefault();
     }
 
     const deleteTask = (task) => {
@@ -110,7 +115,7 @@ const Home = props => {
             <div className="titles">To do - App</div>
             <div className="todos">
                 <div className="newTodo">
-                    <form>
+                    <form onSubmit={addTask}>
                         <input 
                             type="text" 
                             placeholder="Tarefa..." 
