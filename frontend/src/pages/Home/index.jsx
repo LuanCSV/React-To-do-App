@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './styles.css';
-import axios from 'axios';
+
+import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI } from '../../services/tasks';
 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import {  faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
@@ -18,63 +19,61 @@ const Home = props => {
         //         return ress.json();
         //     }).then(data => console.log(data));
         // const res = axios.get('http://localhost:5050/tasks').then(response => {return response.data});
-        const response = await axios.get('http://localhost:5050/tasks');
-        console.log(response.data);
-        const initialTasks = [...response.data];
-        setTasks([...initialTasks]);
+        // const response = await axios.get('http://localhost:5050/tasks');
+        // console.log(response.data);
+
+        const tasksAPI = await getAllTasks();
+        setTasks([...tasksAPI]);
     }, []);
 
     useEffect(() => {
         loadTasks();
     }, [loadTasks]);
 
-    const completeTask = (task) => {
-        const tasksTemp = [...tasks];
-        // metodo com filter
-        // const [taskUpdate] = tasksTemp.filter(t => {
+    const completeTask = async (task) => {
+        // const tasksTemp = [...tasks];
+        // // metodo com filter
+        // // const [taskUpdate] = tasksTemp.filter(t => {
+        // //     return t.id === task.id;
+        // // });
+        // const taskUpdate = tasksTemp.find(t => {
         //     return t.id === task.id;
         // });
-        const taskUpdate = tasksTemp.find(t => {
-            return t.id === task.id;
-        });
-        taskUpdate.state = !taskUpdate.state;
-        setTasks(tasksTemp);
+        // taskUpdate.state = !taskUpdate.state;
+        const taskToComplete = await completeTaskAPI(task);
+
+        setTasks([...taskToComplete]);
     }
 
-    const addTask = (e) => {
+    const addTask = async (e) => {
+        if(e){
+            e.preventDefault();
+        }
         if (valueInput.length > 0) {
             const newTask = {
-                id: Date.now(),
-                description: valueInput.toUpperCase(),
-                state: false
+                description: valueInput.toUpperCase()
             }
+            
+            const addedTasks = await addTaskAPI(newTask)
 
-            const taskTemp = [...tasks];
-            taskTemp.push(newTask);
-            setTasks(taskTemp);
+            setTasks(addedTasks);
             setValueInput('');
         } else {
             alert('Digite a descricao da tarefa')
         }
-        e.preventDefault();
+
     }
 
-    const deleteTask = (task) => {
-        const tasksTemp = [...tasks];
-        // const taskDelete = tasksTemp.find(t => {
-        //     return t.id === task.id;
-        // });
-        const indexofTask = tasksTemp.findIndex((t) => t.id === task.id);
-        tasksTemp.splice(indexofTask, 1);
+    const deleteTask = async (task) => {
+        const tasksTemp = await deleteTaskAPI(task);
         setTasks(tasksTemp);
-        console.log(tasksTemp);
     }
 
     const renderTarefas = () => {
         return (
             tasks.map((task) => {
                 return (
-                    <li key={task.id}> 
+                    <li key={task._id}> 
                     <div className="task">
 
                         {task.state && <div className="state ok" onClick={() => completeTask(task)} ><Icon icon={tarefaConcluida}/></div>}
@@ -116,7 +115,9 @@ const Home = props => {
 
                 <div className="list">
                     <ul>
-                        {renderTarefas()}
+                        {tasks.length < 0 ? 
+                            <li>Não há tarefas</li>:
+                            renderTarefas()}
                     </ul>
                 </div>
             </div>
