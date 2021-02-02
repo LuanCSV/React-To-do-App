@@ -103,28 +103,29 @@
     width: 100%;
 }
 
-.App .TodoApp .list ul li .task .description{
+.App .TodoApp .list ul li .task .description, .App .TodoApp .list ul li .task .updateForm{
     display: flex;
     align-items: center;
     height: 100%;
     width: 100%;
+    word-break: break-all;
 }
-
-.App .TodoApp .list ul li .task .description input{
+.App .TodoApp .list ul li .task .updateForm input{
     background-color: whitesmoke;
     border:none;
     height: 90%;
+    width: 100%;
     font-size: 1rem;
     font-family: 'Spartan', sans-serif;
 }
 
-.App .TodoApp .list ul li .task .description .editActions{
+.App .TodoApp .list ul li .task .updateForm .editActions{
     display: flex;
     height: 100%;
     width: 100px;
     max-width: 100px;
 }
-.App .TodoApp .list ul li .task .description .editActions button{
+.App .TodoApp .list ul li .task .updateForm .editActions button{
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -133,14 +134,14 @@
     width: 50%;
 }
 
-.App .TodoApp .list ul li .task .description .editActions button:hover{
+.App .TodoApp .list ul li .task .updateForm .editActions button:hover{
     background-color: rgba(83, 184, 36, 0.52);
 }
 
-.App .TodoApp .list ul li .task .description .editActions button:last-child{
+.App .TodoApp .list ul li .task .updateForm .editActions button:last-child{
     color: red;
 }
-.App .TodoApp .list ul li .task .description .editActions button:last-child:hover{
+.App .TodoApp .list ul li .task .updateForm .editActions button:last-child:hover{
     background-color: rgba(255, 47, 47, 0.52);
 }
 

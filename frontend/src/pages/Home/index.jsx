@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './styles.css';
 
-import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI } from '../../services/tasks';
+import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI, updateTaskAPI } from '../../services/tasks';
 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faCheck as tarefaConfirmar, faTimes as tarefaCancelar ,faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ const Home = props => {
     const [valueAddInput, setValueAddInput] = useState('');
     const [valueEditInput, setValueEditInput] = useState('');
     const [editStage, setEditStage] = useState(false);
+    const [editItem, setEditItem] = useState('');
     const loadTasks = useCallback(async () => {
 
         // const res = fetch('http://localhost:5050/tasks')
@@ -69,12 +70,22 @@ const Home = props => {
         setTasks(tasksTemp);
     }
 
-    const editMode = (task) => {
-
-        if (task.id && editStage === false) {
-            setEditStage(true);
+    const updateTask = async (task) => {
+        if (valueEditInput.length > 0) {
+            const taskUpdated = {
+                description: valueEditInput.toUpperCase()
+            }
+            const tasksTemp = await updateTaskAPI(task._id, taskUpdated);
+            console.log(tasksTemp);
+            setTasks(tasksTemp);
+            setEditItem('');
+            setEditStage(false);
+            setValueEditInput('');
+        } else {
+            alert('Digite a descricao da tarefa para atualizar')
         }
     }
+
 
     const renderTarefas = () => {
         
@@ -94,24 +105,42 @@ const Home = props => {
                             }
 
                                 <div className="description">
-                                    {task.description}
+                                    <p>{task.description}</p>
                                 </div>
 
-                                <form className="description">
+                                {editItem === task._id && editStage &&
+                                <form className="updateForm">
                                     <input
                                         type="text"
                                         value={valueEditInput}
                                         onChange={(e) => { setValueEditInput(e.target.value) }}
                                     />
                                     <div className="editActions">
-                                        <button type="button"><Icon icon={tarefaConfirmar}/></button>
-                                        <button type="button" onClick={() => setEditStage(false)}><Icon icon={tarefaCancelar}/></button>
+                                        <button 
+                                        type="button"
+                                        onClick={() => updateTask(task)}>
+                                            <Icon icon={tarefaConfirmar}/>
+                                        </button>
+
+                                        <button 
+                                            type="button" 
+                                            onClick={() => {
+                                                setEditStage(false);
+                                                setEditItem('');
+                                        }}>
+                                            <Icon icon={tarefaCancelar}/>
+                                        </button>
                                     </div>
                                 </form>
+                                }
                         </div>
 
                         <div className="actions">
-                            <div onClick={() => console.log(task)} className="edit">
+                            <div onClick={() => { 
+                                    setEditStage(true)
+                                    setEditItem(task._id)
+                                    setValueEditInput(task.description);
+                            }} className="edit">
                                 <Icon icon={Editar} />
                             </div>
                             <div onClick={() => deleteTask(task)} className="delete">
