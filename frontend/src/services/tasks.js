@@ -21,4 +21,9 @@ const addTaskAPI = async (task) => {
     return res.data;
 }
 
+const updateTaskAPI = async (task) => {
+    const res = await axios.put('http://localhost:5050/tasks/update/'+task._id, task);
+    return res.data;
+}
+
 export { getAllTasks, completeTaskAPI, deleteTaskAPI, addTaskAPI }

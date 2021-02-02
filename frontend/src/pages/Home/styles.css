@@ -98,8 +98,52 @@
 
 .App .TodoApp .list ul li .task{
     display: flex;
-
+    height: 100%;
+    align-items: center;
+    width: 100%;
 }
+
+.App .TodoApp .list ul li .task .description{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.App .TodoApp .list ul li .task .description input{
+    background-color: whitesmoke;
+    border:none;
+    height: 90%;
+    font-size: 1rem;
+    font-family: 'Spartan', sans-serif;
+}
+
+.App .TodoApp .list ul li .task .description .editActions{
+    display: flex;
+    height: 100%;
+    width: 100px;
+    max-width: 100px;
+}
+.App .TodoApp .list ul li .task .description .editActions button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: greenyellow;
+    transition: all ease-in-out 0.2s;
+    width: 50%;
+}
+
+.App .TodoApp .list ul li .task .description .editActions button:hover{
+    background-color: rgba(83, 184, 36, 0.52);
+}
+
+.App .TodoApp .list ul li .task .description .editActions button:last-child{
+    color: red;
+}
+.App .TodoApp .list ul li .task .description .editActions button:last-child:hover{
+    background-color: rgba(255, 47, 47, 0.52);
+}
+
 
 .App .TodoApp .list ul li .task .state svg{
     margin-right: 5px;
@@ -110,8 +154,32 @@
     color:#4caf50;
 }
 
-.App .TodoApp .list ul li .delete{
-    color: #b71c1c;
+.App .TodoApp .list ul li .actions{
+    display: flex;
+}
+
+.App .TodoApp .list ul li .actions div{
+    transition: all ease-in-out 0.2s;
+}
+
+.App .TodoApp .list ul li .actions .edit{
+    color: #414141;
+    cursor: pointer;
+    margin: 0px 15px;
+}
+
+.App .TodoApp .list ul li .actions .edit:hover{
+    color: #ffc400;
+}
+
+
+.App .TodoApp .list ul li .actions .delete{
+    color: #741414;
+    cursor: pointer;
+}
+
+.App .TodoApp .list ul li .actions .delete:hover{
+    color: #ff0000;
 }
 
 .App .TodoApp .list ul li:last-child {

@@ -4,16 +4,17 @@ import './styles.css';
 import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI } from '../../services/tasks';
 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import {  faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
-import { faCircle as tarefaPendente, faCheckCircle as tarefaConcluida} from '@fortawesome/free-regular-svg-icons';
+import { faCheck as tarefaConfirmar, faTimes as tarefaCancelar ,faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
+import { faCircle as tarefaPendente, faCheckCircle as tarefaConcluida, faEdit as Editar } from '@fortawesome/free-regular-svg-icons';
 
 const Home = props => {
 
     const [tasks, setTasks] = useState([]);
-    const [valueInput, setValueInput] = useState('');
-
+    const [valueAddInput, setValueAddInput] = useState('');
+    const [valueEditInput, setValueEditInput] = useState('');
+    const [editStage, setEditStage] = useState(false);
     const loadTasks = useCallback(async () => {
-        
+
         // const res = fetch('http://localhost:5050/tasks')
         //     .then((ress) => {
         //         return ress.json();
@@ -46,22 +47,21 @@ const Home = props => {
     }
 
     const addTask = async (e) => {
-        if(e){
+        if (e) {
             e.preventDefault();
         }
-        if (valueInput.length > 0) {
+        if (valueAddInput.length > 0) {
             const newTask = {
-                description: valueInput.toUpperCase()
+                description: valueAddInput.toUpperCase()
             }
-            
+
             const addedTasks = await addTaskAPI(newTask)
 
             setTasks(addedTasks);
-            setValueInput('');
+            setValueAddInput('');
         } else {
             alert('Digite a descricao da tarefa')
         }
-
     }
 
     const deleteTask = async (task) => {
@@ -69,54 +69,83 @@ const Home = props => {
         setTasks(tasksTemp);
     }
 
+    const editMode = (task) => {
+
+        if (task.id && editStage === false) {
+            setEditStage(true);
+        }
+    }
+
     const renderTarefas = () => {
+        
         return (
             tasks.map((task) => {
                 return (
-                    <li key={task._id}> 
-                    <div className="task">
+                    <li key={task._id}>
+                        <div className="task">
+                            {task.state && <div className="state ok" onClick={() => completeTask(task)} ><Icon icon={tarefaConcluida} /></div>}
+                            {!task.state &&
+                                <div
+                                    className="state"
+                                    onClick={() => completeTask(task)}
+                                >
+                                    <Icon icon={tarefaPendente} />
+                                </div>
+                            }
 
-                        {task.state && <div className="state ok" onClick={() => completeTask(task)} ><Icon icon={tarefaConcluida}/></div>}
-                        {!task.state &&
-                            <div 
-                                className="state" 
-                                onClick={() => completeTask(task)}
-                            >
-                                <Icon icon={tarefaPendente}/>
+                                <div className="description">
+                                    {task.description}
+                                </div>
+
+                                <form className="description">
+                                    <input
+                                        type="text"
+                                        value={valueEditInput}
+                                        onChange={(e) => { setValueEditInput(e.target.value) }}
+                                    />
+                                    <div className="editActions">
+                                        <button type="button"><Icon icon={tarefaConfirmar}/></button>
+                                        <button type="button" onClick={() => setEditStage(false)}><Icon icon={tarefaCancelar}/></button>
+                                    </div>
+                                </form>
+                        </div>
+
+                        <div className="actions">
+                            <div onClick={() => console.log(task)} className="edit">
+                                <Icon icon={Editar} />
                             </div>
-                        }
-                        
-                        <div className="description">{task.description} </div>
-                    </div>
-                    <div onClick={() => deleteTask(task)} className="delete">
-                        <Icon icon={lixeira}/> 
-                    </div>
-                </li>
+                            <div onClick={() => deleteTask(task)} className="delete">
+                                <Icon icon={lixeira} />
+                            </div>
+                        </div>
+
+                    </li> 
                 )
             })
         );
     }
 
-    return(
+    
+    return (
         <div className="TodoApp">
             <div className="titles">To do - App</div>
             <div className="todos">
                 <div className="newTodo">
                     <form onSubmit={addTask}>
-                        <input 
-                            type="text" 
-                            placeholder="Tarefa..." 
-                            value={valueInput}
-                            onChange={(event) => setValueInput(event.target.value)}
+                        <input
+                            type="text"
+                            placeholder="Tarefa..."
+                            value={valueAddInput}
+                            onChange={(event) => setValueAddInput(event.target.value)}
                         />
-                        <button type="button" onClick={() => addTask()}><Icon icon={adicionarTarefa}/></button>
+                        <button type="button" onClick={() => addTask()}><Icon icon={adicionarTarefa} /></button>
                     </form>
                 </div>
 
                 <div className="list">
                     <ul>
-                        {tasks.length < 0 ? 
-                            <li>Não há tarefas</li>:
+                        {tasks.length < 0 ?
+                            <li>Não há tarefas</li> :
                             renderTarefas()}
                     </ul>
                 </div>
