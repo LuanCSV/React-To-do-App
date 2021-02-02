@@ -58,7 +58,19 @@ app.delete('/tasks/delete/:id', async (req, res) => {
     
     const registers = await Task.find();
     res.json(registers);
-})
+});
+
+app.put('/tasks/update/:id', async (req, res) => {
+    const Task = require('./models/task-model');
+    const body = req.body;
+    const id = req.params.id;
+    const objTaks = await Task.findById(id);
+    objTaks.description = body.description;
+    await objTaks.save();
+    
+    const registers = await Task.find();
+    res.json(registers);
+});
 
 
 
