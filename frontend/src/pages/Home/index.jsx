@@ -4,7 +4,7 @@ import './styles.css';
 import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI, updateTaskAPI } from '../../services/tasks';
 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faCheck as tarefaConfirmar, faTimes as tarefaCancelar ,faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
+import { faCheck as tarefaConfirmar, faTimes as tarefaCancelar, faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
 import { faCircle as tarefaPendente, faCheckCircle as tarefaConcluida, faEdit as Editar } from '@fortawesome/free-regular-svg-icons';
 
 const Home = props => {
@@ -12,7 +12,6 @@ const Home = props => {
     const [tasks, setTasks] = useState([]);
     const [valueAddInput, setValueAddInput] = useState('');
     const [valueEditInput, setValueEditInput] = useState('');
-    const [editStage, setEditStage] = useState(false);
     const [editItem, setEditItem] = useState('');
     const loadTasks = useCallback(async () => {
 
@@ -79,7 +78,6 @@ const Home = props => {
             console.log(tasksTemp);
             setTasks(tasksTemp);
             setEditItem('');
-            setEditStage(false);
             setValueEditInput('');
         } else {
             alert('Digite a descricao da tarefa para atualizar')
@@ -88,7 +86,7 @@ const Home = props => {
 
 
     const renderTarefas = () => {
-        
+
         return (
             tasks.map((task) => {
                 return (
@@ -103,43 +101,45 @@ const Home = props => {
                                     <Icon icon={tarefaPendente} />
                                 </div>
                             }
-
+                            {editItem !== task._id &&
                                 <div className="description">
-                                    <p>{task.description}</p>
+                                    {task.description}
                                 </div>
+                            }
+                            
+                            
 
-                                {editItem === task._id && editStage &&
+                            {editItem === task._id && 
                                 <form className="updateForm">
                                     <input
+                                        autoFocus
                                         type="text"
                                         value={valueEditInput}
                                         onChange={(e) => { setValueEditInput(e.target.value) }}
                                     />
                                     <div className="editActions">
-                                        <button 
-                                        type="button"
-                                        onClick={() => updateTask(task)}>
-                                            <Icon icon={tarefaConfirmar}/>
+                                        <button
+                                            type="button"
+                                            onClick={() => updateTask(task)}>
+                                            <Icon icon={tarefaConfirmar} />
                                         </button>
 
-                                        <button 
-                                            type="button" 
+                                        <button
+                                            type="button"
                                             onClick={() => {
-                                                setEditStage(false);
                                                 setEditItem('');
-                                        }}>
-                                            <Icon icon={tarefaCancelar}/>
+                                            }}>
+                                            <Icon icon={tarefaCancelar} />
                                         </button>
                                     </div>
                                 </form>
-                                }
+                            }
                         </div>
 
                         <div className="actions">
-                            <div onClick={() => { 
-                                    setEditStage(true)
-                                    setEditItem(task._id)
-                                    setValueEditInput(task.description);
+                            <div onClick={() => {
+                                setEditItem(task._id)
+                                setValueEditInput(task.description);
                             }} className="edit">
                                 <Icon icon={Editar} />
                             </div>
@@ -148,13 +148,13 @@ const Home = props => {
                             </div>
                         </div>
 
-                    </li> 
+                    </li>
                 )
             })
         );
     }
 
-    
+
     return (
         <div className="TodoApp">
             <div className="titles">To do - App</div>
