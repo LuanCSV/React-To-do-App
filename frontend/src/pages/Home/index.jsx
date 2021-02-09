@@ -55,9 +55,13 @@ const Home = props => {
                 description: valueAddInput.toUpperCase()
             }
 
-            const addedTasks = await addTaskAPI(newTask)
-
-            setTasks(addedTasks);
+            const res = await addTaskAPI(newTask);
+            
+            if (res.status) {
+                loadTasks();
+            } else {
+                alert(res.message);
+            }
             setValueAddInput('');
         } else {
             alert('Digite a descricao da tarefa')
@@ -65,8 +69,12 @@ const Home = props => {
     }
 
     const deleteTask = async (task) => {
-        const tasksTemp = await deleteTaskAPI(task);
-        setTasks(tasksTemp);
+        const res = await deleteTaskAPI(task);
+        if (res.status) {
+            loadTasks();
+        } else {
+            alert(res.message);
+        }
     }
 
     const updateTask = async (task) => {
@@ -74,9 +82,14 @@ const Home = props => {
             const taskUpdated = {
                 description: valueEditInput.toUpperCase()
             }
-            const tasksTemp = await updateTaskAPI(task._id, taskUpdated);
-            console.log(tasksTemp);
-            setTasks(tasksTemp);
+            task.description = taskUpdated.description;
+            const res = await updateTaskAPI(task);
+
+            if (res.status) {
+                loadTasks();
+            } else {
+                alert(res.message);
+            }
             setEditItem('');
             setValueEditInput('');
         } else {
