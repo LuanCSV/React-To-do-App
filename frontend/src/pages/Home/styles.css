@@ -6,6 +6,14 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.308);
 
     height: 600px;
+
+    background-color: white;
+
+    border-radius: 5px;
+
+    box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.514);
+
+    overflow: hidden;
 }
 
 .App .TodoApp .titles {
@@ -19,6 +27,7 @@
     color: white;
 
     font-size: 1.5rem;
+
 }
 
 .App .TodoApp .todos {
@@ -64,9 +73,10 @@
 }
 
 .App .TodoApp .todos .newTodo form button:hover{
-    background-color: #00695f;
+    background-color: white;
     cursor: pointer;
-    color: #bbbbbb;
+    color: #009688;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.514);
 }
 
 
@@ -149,6 +159,7 @@
 .App .TodoApp .list ul li .task .state svg{
     margin-right: 5px;
     color: #666;
+    cursor: pointer;
 }
 
 .App .TodoApp .list ul li .task .state.ok svg{
