@@ -26,7 +26,7 @@ function Login(props) {
 
         if (res.status) {
             alert(res.message);
-            localStorage.setItem(ID_TOKEN, true);
+            localStorage.setItem(ID_TOKEN, res.token);
             history.push('/to-do');
         } else {
             alert(res.message);

@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { API_URL } from './../constants/services';
+import { API_URL, ID_TOKEN } from './../constants/services';
+
+axios.defaults.headers['Authorization'] = localStorage.getItem(ID_TOKEN);
 
 const getAllTasks = async () => {
     const res = await axios.get(`${API_URL}/tasks/`);
