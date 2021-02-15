@@ -1,6 +1,6 @@
 const express = require('express');
 const routes = express.Router();
-const Task = require('../models/task-model');
+const Task = require('../../models/task-model');
 
 routes.get('/', async (req, res, next) => {
     const registeredTasks = await Task.find({deleted: false});
