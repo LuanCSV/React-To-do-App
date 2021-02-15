@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = express.Router();
 const crypto = require('crypto');
-// const jwt = require('../services/jwt');
+const jwt = require('../../services/jwt');
 const User = require('../../models/users');
 
 routes.get('/', async (req, res, next) => {
