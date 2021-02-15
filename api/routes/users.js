@@ -32,7 +32,7 @@ routes.post('/auth', async (req, res, next) => {
     if (registro) {
         res.json({status: true, message: "Logado com sucesso"})
     } else {
-        res.json({status: false, message: "Algo deu errado"})
+        res.json({status: false, message: "Usuario nao encontrado ou senha incorreta"})
     }
 });
 
