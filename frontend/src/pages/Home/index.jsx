@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import './styles.css';
 
 import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI, updateTaskAPI } from '../../services/tasks';
@@ -6,6 +7,7 @@ import { completeTaskAPI, deleteTaskAPI, getAllTasks, addTaskAPI, updateTaskAPI 
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faCheck as tarefaConfirmar, faTimes as tarefaCancelar, faPlusCircle as adicionarTarefa, faTrashAlt as lixeira } from '@fortawesome/free-solid-svg-icons';
 import { faCircle as tarefaPendente, faCheckCircle as tarefaConcluida, faEdit as Editar } from '@fortawesome/free-regular-svg-icons';
+import { ID_TOKEN } from './../../constants/services'
 
 const Home = props => {
 
@@ -13,6 +15,8 @@ const Home = props => {
     const [valueAddInput, setValueAddInput] = useState('');
     const [valueEditInput, setValueEditInput] = useState('');
     const [editItem, setEditItem] = useState('');
+    const history = useHistory();
+
     const loadTasks = useCallback(async () => {
 
         // const res = fetch('http://localhost:5050/tasks')
@@ -97,6 +101,10 @@ const Home = props => {
         }
     }
 
+    const logout = () => {
+        localStorage.removeItem(ID_TOKEN);
+        history.push('/');
+    }
 
     const renderTarefas = () => {
 
@@ -170,7 +178,10 @@ const Home = props => {
 
     return (
         <div className="TodoApp">
-            <div className="titles">To do - App</div>
+            <div className="titles">
+                To do - App
+                <button onClick={() => { logout()}}> Logout </button>
+            </div>
             <div className="todos">
                 <div className="newTodo">
                     <form onSubmit={addTask}>

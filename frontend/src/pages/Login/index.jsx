@@ -1,18 +1,38 @@
 import React, { useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { authUser } from '../../services/users';
 import './styles.css';
+import { ID_TOKEN } from './../../constants/services'
 
 function Login(props) {
 
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const history = useHistory();
 
+    if (localStorage.getItem(ID_TOKEN)) {
+        console.log("tem localStorage");
+        history.push('/to-do');
+    }else {
+        console.log("nao tem localStorage");
+    }
 
-    const logar = useCallback((event) => {
+    const logar = useCallback(async (event) => {
         if (event) {
             event.preventDefault();
         }
-        console.log(email, senha);
-    }, [email, senha]);
+        const body = {email, senha};
+        const res = await authUser(body);
+
+        if (res.status) {
+            alert(res.message);
+            localStorage.setItem(ID_TOKEN, true);
+            history.push('/to-do');
+        } else {
+            alert(res.message);
+        }
+
+    }, [email, senha, history]);
 
     return (
         <div className="pageLogin">
@@ -36,7 +56,7 @@ function Login(props) {
                         placeholder="Senha"/>
                 </div>
                 <div className="area">
-                    <button type="submit" onClick={() => {logar()}}> Logar</button>
+                    <button type="submit"> Logar</button>
                 </div>
                 <div className="area esqueceuSenha">
                     <button> Esqueceu a senha? </button>
